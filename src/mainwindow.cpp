@@ -26,6 +26,15 @@ MainWindow::MainWindow(AppSettings *settings, Benchmark *benchmark, QWidget *par
 {
     ui->setupUi(this);
 
+    this->setFixedWidth(575);
+    ui->deviceModel->setFixedWidth(551);
+    ui->comboBox_MixRatio->setVisible(false);
+    ui->label_Mix->setVisible(false);
+    ui->mixBar_SEQ_1->setVisible(false);
+    ui->mixBar_SEQ_2->setVisible(false);
+    ui->mixBar_RND_1->setVisible(false);
+    ui->mixBar_RND_2->setVisible(false);
+
     statusBar()->setSizeGripEnabled(false);
 
     ui->loopsCount->findChild<QLineEdit*>()->setReadOnly(true);
@@ -71,11 +80,16 @@ MainWindow::MainWindow(AppSettings *settings, Benchmark *benchmark, QWidget *par
         ui->comboBox_fileSize->addItem(QStringLiteral("%1 %2").arg(i).arg(tr("GiB")), i * 1024);
     }
 
+    for (int i = 1; i < 10; i++) {
+        ui->comboBox_MixRatio->addItem(QStringLiteral("R%1%/W%2%").arg(i * 10).arg(100 - i * 10));
+    }
+
     ui->comboBox_fileSize->
             setCurrentIndex(ui->comboBox_fileSize->findData(m_settings->getFileSize()));
 
     m_progressBars << ui->readBar_SEQ_1 << ui->writeBar_SEQ_1 << ui->readBar_SEQ_2 << ui->writeBar_SEQ_2
-                   << ui->readBar_RND_1 << ui->writeBar_RND_1 << ui->readBar_RND_2 << ui->writeBar_RND_2;
+                   << ui->readBar_RND_1 << ui->writeBar_RND_1 << ui->readBar_RND_2 << ui->writeBar_RND_2
+                   << ui->mixBar_SEQ_1 << ui->mixBar_SEQ_2 << ui->mixBar_RND_1 << ui->mixBar_RND_2;
 
     QMetaEnum metaEnum = QMetaEnum::fromType<AppSettings::ComparisonField>();
 
